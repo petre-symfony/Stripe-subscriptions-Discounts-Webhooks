@@ -4,15 +4,15 @@ parameters:
 #    parameter_name: value
 
 services:
-    shopping_cart:
-        class: AppBundle\Store\ShoppingCart
-        autowire: true
+  shopping_cart:
+    class: AppBundle\Store\ShoppingCart
+    autowire: true
 
-    stripe_client:
-        class: AppBundle\StripeClient
-        arguments: ['%stripe_secret_key%']
-        autowire: true
+  stripe_client:
+    class: AppBundle\StripeClient
+    arguments: ['%stripe_secret_key%']
+    autowire: true
 
-    subscription_helper:
-        class: AppBundle\Subscription\SubscriptionHelper
-        autowire: true
+  subscription_helper:
+    class: AppBundle\Subscription\SubscriptionHelper
+    autowire: true
