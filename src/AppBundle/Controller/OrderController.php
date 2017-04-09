@@ -27,7 +27,16 @@ class OrderController extends BaseController {
    * @Route("/cart/subscription/{planId}", name="order_add_subscription_to_cart")
    */
   public function addSubscriptionToCartAction($planId) {
-    // todo - add the subscription plan to the cart!
+    $subscriptionHelper = $this->get('subscription_helper');
+    $plan = $subscriptionHelper->findPlan($planId);
+    
+    if(!$plan) {
+      throw $this->createNotFoundException('Bad plan id!');
+    }
+    
+    $this->get('shopping_cart')->addSubscription($planId);
+    
+    return $this->redirectToRoute('order_checkout');
   }
 
   /**
