@@ -21,6 +21,6 @@ class ProfileController extends BaseController {
    * @Method("POST")
    */
   public function cancelSubscriptionAction() {
-    
+    $stripeClient = $this->get('stripe_client');  
   }
 }
