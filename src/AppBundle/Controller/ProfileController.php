@@ -40,5 +40,6 @@ class ProfileController extends BaseController {
    */
   public function reactivateSubscriptionAction() { 
     $stripeClient = $this->get('stripe_client');
+    $stripeClient->reactivateSubscription($this->getUser());
   }
 }

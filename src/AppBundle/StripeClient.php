@@ -82,5 +82,14 @@ class StripeClient {
     if(!$user->hasActiveSubscription()){
       throw new \LogicException('Subcriptions can only be reactivated if the subscription has not actually ended yet');
     } 
+    
+    $subscription = \Stripe\Subscription::retrieve(
+      $user->getSubscription()->getStripeSubscriptionId()       
+    );
+    //this triggers the refresh of the subscription!
+    $subscription->plan = $user->getSubscription()->getStripePlanId();
+    $subscription->save();
+    
+    return $subscription;
   }
 }
