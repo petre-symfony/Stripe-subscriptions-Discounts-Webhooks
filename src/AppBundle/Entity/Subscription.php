@@ -95,4 +95,21 @@ class Subscription {
     $this->endsAt = $this->billingPeriodEndsAt;
     $this->billingPeriodEndsAt = null;
   }
+  
+  /**
+   * Subscription is active, or canceled but still in "active" period
+   * 
+   * @return bool
+   */
+  public function isActive() {
+    return $this->endsAt === null || $this->endsAt > new \DateTime();  
+  }
+  
+  /* if the subscription is active, has the user actually canceled it or not?
+   * 
+   * @return bool
+  */
+  public function isCanceled() {
+    return $this->endsAt !== null; 
+  }
 }
