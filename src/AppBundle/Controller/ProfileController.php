@@ -24,6 +24,8 @@ class ProfileController extends BaseController {
     $stripeClient = $this->get('stripe_client'); 
     $stripeClient->cancelSubscription($this->getUser());
     
+    $subscription = $this->getUser()->getSubscription();
+    
     $this->addFlash('success', 'Subscription Canceled :(');
     
     return $this->redirectToRoute('profile_account');
