@@ -77,4 +77,10 @@ class StripeClient {
       'at_period_end' => true
     ]);
   }
+  
+  public function reactivateSubscription(User $user) {
+    if(!$user->hasActiveSubscription()){
+      throw new \LogicException('Subcriptions can only be reactivated if the subscription has not actually ended yet');
+    } 
+  }
 }

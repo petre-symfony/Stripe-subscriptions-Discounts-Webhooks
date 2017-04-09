@@ -39,5 +39,6 @@ class ProfileController extends BaseController {
    * @Route("/profile/subscription/reactivate", name="account_subscription_reactivate")
    */
   public function reactivateSubscriptionAction() { 
+    $stripeClient = $this->get('stripe_client');
   }
 }
