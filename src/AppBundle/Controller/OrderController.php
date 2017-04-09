@@ -87,6 +87,9 @@ class OrderController extends BaseController {
     } else {
       $stripeCustomer = $stripeClient->updateCustomerCard($user, $token);
     }
+    
+    //save card details
+    $this->get('subscription_helper')->updateCardDetails($user, $stripeCustomer);
 
     /** @var ShoppingCart $cart */
     $cart = $this->get('shopping_cart');
