@@ -41,5 +41,10 @@ class SubscriptionHelper {
       $subscription = new Subscription();
       $subscription->setUser($user);
     }
+    
+    $subscription->activateSubscription(
+      $stripeSubscription->plan->id, 
+      $stripeSubscription->id
+    );
   }
 }
