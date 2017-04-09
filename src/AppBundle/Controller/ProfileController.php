@@ -40,6 +40,12 @@ class ProfileController extends BaseController {
    */
   public function reactivateSubscriptionAction() { 
     $stripeClient = $this->get('stripe_client');
-    $stripeClient->reactivateSubscription($this->getUser());
+    $stripeSubscription = $stripeClient->reactivateSubscription($this->getUser());
+    
+    $this->get('subscription_helper')->addSubscriptionToUser($stripeSubscription, $this->getUser());
+    
+    $this->addFlash('success', 'Welcome back!');
+    
+    return $this->redirectToRoute('profile_account');
   }
 }
