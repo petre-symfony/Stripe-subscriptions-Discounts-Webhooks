@@ -76,4 +76,8 @@ class User extends BaseUser
   public function hasActiveSubscription() {
     return $this->getSubscription() && $this->getSubscription()->isActive();  
   }
+  
+  public function hasActiveNonCancelledSubscription() {
+    return $this->hasActiveSubscription() && !$this->getSubscription()->isCanceled();  
+  }
 }
