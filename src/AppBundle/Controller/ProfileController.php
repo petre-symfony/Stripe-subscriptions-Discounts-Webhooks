@@ -34,4 +34,10 @@ class ProfileController extends BaseController {
     
     return $this->redirectToRoute('profile_account');
   }
+  
+  /**
+   * @Route("/profile/subscription/reactivate", name="account_subscription_reactivate")
+   */
+  public function reactivateSubscriptionAction() { 
+  }
 }
