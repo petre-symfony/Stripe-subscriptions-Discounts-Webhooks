@@ -83,9 +83,9 @@ class OrderController extends BaseController {
     /** @var User $user */
     $user = $this->getUser();
     if (!$user->getStripeCustomerId()) {
-      $stripeClient->createCustomer($user, $token);
+      $stripeCustomer = $stripeClient->createCustomer($user, $token);
     } else {
-      $stripeClient->updateCustomerCard($user, $token);
+      $stripeCustomer = $stripeClient->updateCustomerCard($user, $token);
     }
 
     /** @var ShoppingCart $cart */
