@@ -4,12 +4,15 @@ namespace AppBundle\Subscription;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\Subscription;
+use Doctrine\ORM\EntityManager;
 
 class SubscriptionHelper {
   /** @var SubscriptionPlan[] */
   private $plans = [];
+  
+  private $em;
 
-  public function __construct() {
+  public function __construct(EntityManager $em) {
     $this->plans[] = new SubscriptionPlan(
       'farmer_brent_monthly',
       'Farmer Brent',
@@ -21,6 +24,8 @@ class SubscriptionHelper {
       'New Zeelander',
       199
     );
+    
+    $this->em = $em;
   }
 
   /**
@@ -46,5 +51,8 @@ class SubscriptionHelper {
       $stripeSubscription->plan->id, 
       $stripeSubscription->id
     );
+    
+    $this->em->persist($subscription);
+    $this->em->flush($subscription);
   }
 }
