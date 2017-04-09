@@ -16,7 +16,11 @@
             <tr>
               <th>Subscription</th>
               <td>
-                None
+                {% if app.user.subscription %}
+                  <span class="label label-success">Active</span>
+                {% else %}
+                   <span class="label label-default">None</span>
+                {% endif %}  
               </td>
             </tr>
             <tr>
@@ -28,7 +32,11 @@
             <tr>
               <th>Credit Card</th>
               <td>
-                None
+                {% if app.user.cardBrand %}
+                  {{ app.user.cardBrand }} ending in {{ app.user.cardLast4 }}
+                {% else %}
+                  None
+                {% endif %}  
               </td>
             </tr>
           </tbody>
