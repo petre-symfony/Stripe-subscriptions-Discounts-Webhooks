@@ -5,7 +5,18 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-12">
-        <h1>My Account</h1>
+        <h1>
+          My Account
+          {% if app.user.hasActiveSubscription %}
+            {% if app.user.subscription.isCanceled %}
+              #todo - add reactivate button
+            {% else %}  
+              <form action="{{ path('account_subscription_cancel') }}" method="POST" class="pull-right">
+                <button type="submit" class="btn btn-danger btn-xs">Cancel Subscription</button>
+              </form>
+            {% endif %}
+          {% endif %}  
+        </h1>
       </div>
     </div>
 
@@ -16,19 +27,35 @@
             <tr>
               <th>Subscription</th>
               <td>
-                None
+                {% if app.user.hasActiveSubscription %}
+                  {% if app.user.subscription.isCanceled %}
+                    <span class="label label-warning">Cancelled</span>
+                  {% else %}   
+                    <span class="label label-success">Active</span>
+                  {% endif %}
+                {% else %}
+                   <span class="label label-default">None</span>
+                {% endif %}  
               </td>
             </tr>
             <tr>
               <th>Next Billing at:</th>
               <td>
-                n/a
+                {% if app.user.hasActiveNonCancelledSubscription %}
+                  {{ app.user.subscription.billingPeriodEndsAt|date('F jS') }}
+                {% else %}
+                  n/a
+                {% endif %}  
               </td>
             </tr>
             <tr>
               <th>Credit Card</th>
               <td>
-                None
+                {% if app.user.hasActiveNonCancelledSubscription %}
+                  {{ app.user.cardBrand }} ending in {{ app.user.cardLast4 }}
+                {% else %}
+                  None
+                {% endif %}  
               </td>
             </tr>
           </tbody>
