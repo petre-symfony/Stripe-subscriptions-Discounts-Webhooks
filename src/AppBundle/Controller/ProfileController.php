@@ -25,6 +25,10 @@ class ProfileController extends BaseController {
     $stripeClient->cancelSubscription($this->getUser());
     
     $subscription = $this->getUser()->getSubscription();
+    $subscription->deactivateSubscription();
+    $em = $this->getDoctrine()->getManager();
+    $em->persist($subscription);
+    $em->flush();
     
     $this->addFlash('success', 'Subscription Canceled :(');
     
