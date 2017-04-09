@@ -47,9 +47,12 @@ class SubscriptionHelper {
       $subscription->setUser($user);
     }
     
+    $periodEnd = \DateTime::createFromFormat('U', $stripeSubscription->current_period_end);
+    
     $subscription->activateSubscription(
       $stripeSubscription->plan->id, 
-      $stripeSubscription->id
+      $stripeSubscription->id,
+      $periodEnd      
     );
     
     $this->em->persist($subscription);
