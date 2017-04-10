@@ -22,10 +22,15 @@ class ProfileController extends BaseController {
    */
   public function cancelSubscriptionAction() {
     $stripeClient = $this->get('stripe_client'); 
-    $stripeClient->cancelSubscription($this->getUser());
+    $stripeSubscription = $stripeClient->cancelSubscription($this->getUser());
     
     $subscription = $this->getUser()->getSubscription();
-    $subscription->deactivateSubscription();
+    if ($stripeSubscription->status == 'canceled'){
+      $subscription->cancel();
+    } else {
+      $subscription->deactivateSubscription();
+    }
+    
     $em = $this->getDoctrine()->getManager();
     $em->persist($subscription);
     $em->flush();

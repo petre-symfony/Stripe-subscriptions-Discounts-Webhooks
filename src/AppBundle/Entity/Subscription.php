@@ -96,6 +96,11 @@ class Subscription {
     $this->billingPeriodEndsAt = null;
   }
   
+  public function cancel() {
+    $this->endsAt = new \DateTime();
+    $this->billingPeriodEndsAt = null;
+  }
+  
   /**
    * Subscription is active, or canceled but still in "active" period
    * 

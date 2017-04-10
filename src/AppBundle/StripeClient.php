@@ -85,6 +85,8 @@ class StripeClient {
     $subscription->cancel([
       'at_period_end' => $cancelAtPeriodEnd
     ]);
+    
+    return $subscription;
   }
   
   public function reactivateSubscription(User $user) {
