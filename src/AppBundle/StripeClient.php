@@ -74,9 +74,12 @@ class StripeClient {
     );  
     
     $cancelAtPeriodEnd = true;
+    $currentPeriodEnd = new \DateTime('@'.$subscription->current_period_end);
     
     if ($subscription->status == 'past_due'){
       $cancelAtPeriodEnd = false;
+    } elseif ($currentPeriodEnd < new \DateTime('+1 hour')){
+      $cancelAtPeriodEnd = false;  
     }
     
     $subscription->cancel([
