@@ -15,7 +15,8 @@ class ProfileController extends BaseController {
    */
   public function accountAction() {
     return $this->render('profile/account.html.twig', [
-      'error' => null  
+      'error' => null,
+      'stripe_public_key' => $this->getParameter('stripe_public_key') 
     ]);
   }
   /**

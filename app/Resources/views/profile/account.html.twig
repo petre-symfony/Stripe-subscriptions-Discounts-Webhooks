@@ -2,6 +2,8 @@
 {% block javascripts %}
   {{ parent() }}
   
+  {{ include('order/_creditCardFormJavaScript.html.twig') }}
+  
   <script type="text/javascript">
     jQuery(document).ready(function(){
       $('.js-open-credit-card-form').on('click', function(e){
