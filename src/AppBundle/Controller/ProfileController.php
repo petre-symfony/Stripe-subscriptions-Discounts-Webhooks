@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Security("is_granted('ROLE_USER')")
@@ -61,7 +62,11 @@ class ProfileController extends BaseController {
    * @Route("/profile/cart/update", name="account_update_credit_card")
    * @Method("POST")
    */
-  public function updateCreditCardAction() {
+  public function updateCreditCardAction(Request $request) {
+    $token = $request->request->get('stripeToken');
+    $user = $this->getUser();
     
+    $stripeClient = $this->get('stripe_client');
+    $stripeCustomer = $stripeClient->updateCustomerCard($user, $token);
   }
 }
