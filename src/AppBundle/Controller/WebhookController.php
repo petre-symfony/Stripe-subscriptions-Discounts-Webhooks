@@ -18,6 +18,7 @@ class WebhookController extends BaseController{
     }
     
     $eventId = $data['id'];
+    $stripeEvent = $this->get('stripe_client')->findEvent($eventId);
     
     return new Response('baaaa');  
   }
