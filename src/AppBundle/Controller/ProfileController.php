@@ -56,4 +56,12 @@ class ProfileController extends BaseController {
     
     return $this->redirectToRoute('profile_account');
   }
+  
+  /**
+   * @Route("/profile/cart/update", name="account_update_credit_card")
+   * @Method("POST")
+   */
+  public function updateCreditCardAction() {
+    
+  }
 }
