@@ -69,12 +69,18 @@ class StripeClient {
   }
   
   public function cancelSubscription(User $user) {
-    $sub = \Stripe\Subscription::retrieve(
+    $subscription = \Stripe\Subscription::retrieve(
       $user->getSubscription()->getStripeSubscriptionId()
     );  
     
-    $sub->cancel([
-      'at_period_end' => true
+    $cancelAtPeriodEnd = true;
+    
+    if ($subscription->status == 'past_due'){
+      $cancelAtPeriodEnd = false;
+    }
+    
+    $subscription->cancel([
+      'at_period_end' => $cancelAtPeriodEnd
     ]);
   }
   
