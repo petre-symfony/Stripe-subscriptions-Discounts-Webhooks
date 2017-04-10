@@ -68,5 +68,11 @@ class ProfileController extends BaseController {
     
     $stripeClient = $this->get('stripe_client');
     $stripeCustomer = $stripeClient->updateCustomerCard($user, $token);
+    
+    $this->get('subscription_helper')->updateCardDetails($user, $stripeCustomer);
+    
+    $this->addFlash('success', 'Card Updated!');
+    
+    return $this->redirectToRoute('profile_account');
   }
 }
