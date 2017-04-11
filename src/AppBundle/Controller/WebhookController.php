@@ -34,6 +34,13 @@ class WebhookController extends BaseController{
         
         $subscriptionHelper->fullyCancelSubscription($subscription);
         break;
+      case 'invoice.payment_succeeded':
+        $stripeSubscriptionId = $stripeEvent->data->object->subscription;
+        
+        if ($stripeSubscriptionId){
+          $subscription = $this->findSubscription($stripeSubscriptionId);
+        }
+        break;
       default:
         //allow this - we'll have Stripe send us everything
         //throw new \Exception('Unexpected webhook type form Stripe! '.$stripeEvent->type);
