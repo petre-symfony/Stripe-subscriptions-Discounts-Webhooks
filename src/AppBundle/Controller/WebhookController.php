@@ -38,6 +38,16 @@ class WebhookController extends BaseController{
    * @throws \Exception
    */
   private function  findSubscription($stripeSubscriptionId){
+    $subscription = $this->getDoctrine()
+      ->getRepository('AppBundle:Subscription')
+      ->findOneBy([
+          'stripeSubscriptionId' => $stripeSubscriptionId 
+      ]); 
     
+    if (!$subscription) {
+      throw new \Exception('Somehow we have no subscription id ' . $stripeSubscriptionId);
+    }
+    
+    return $subscription;
   }
 }
