@@ -39,6 +39,8 @@ class WebhookController extends BaseController{
         
         if ($stripeSubscriptionId){
           $subscription = $this->findSubscription($stripeSubscriptionId);
+          $stripeSubscription = $this->get('stripe_client')
+            ->findSubscription($stripeSubscriptionId);      
         }
         break;
       default:
