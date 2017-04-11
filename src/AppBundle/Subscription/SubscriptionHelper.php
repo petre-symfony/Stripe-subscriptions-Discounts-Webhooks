@@ -72,4 +72,12 @@ class SubscriptionHelper {
     $this->em->persist($subscription);
     $this->em->flush($subscription);
   }
+  
+  public function handleSubscriptionPaid(Subscription $subscription, \Stripe\Subscription $stripeSubscription) {
+     $newPeriodEnd = \DateTime::createFromFormat('U', $stripeSubscription->current_period_end); 
+     
+     $subscription->setBillingPeriodEndsAt($newPeriodEnd);
+     $this->em->persist($subscription);
+     $this->em->flush($subscription);
+  }
 }
