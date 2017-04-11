@@ -22,12 +22,22 @@ class WebhookController extends BaseController{
     
     switch ($stripeEvent->type){
       case 'customer.subscription.deleted':
-        // totdo - fully cancel the user's subscription
+        $stripeSubscriptionId = $stripeEvent->data->object->id;
+        $subscription = $this->findSubscription($stripeSubscriptionId);
         break;
       default: 
         throw new \Exception('Unexpected webhook type form Stripe! '.$stripeEvent->type);
     }
     
     return new Response('Event handled: ' . $stripeEvent->type);  
+  }
+  
+  /**
+   * @param $stripeSubscriptionId
+   * @return \AppBundle\Entity\Subscription
+   * @throws \Exception
+   */
+  private function  findSubscription($stripeSubscriptionId){
+    
   }
 }
