@@ -18,6 +18,14 @@ class WebhookControllerTest extends WebTestCase {
     $this->em = $this->container->get('doctrine')->getManager();
   }
 
+  public function testStripeCustomerSubscriptionDeleted() {
+    $subscription = $this->createSubscription();
+    
+    //todo send the cancelation webhook
+    
+    $this->assertFalse($subscription->isActive());
+  }
+  
   private function createSubscription(){
     $user = new User();
     $user->setEmail('fluffy'.mt_rand().'@sheep.com');
