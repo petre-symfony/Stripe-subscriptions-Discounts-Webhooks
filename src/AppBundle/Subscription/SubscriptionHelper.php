@@ -76,7 +76,11 @@ class SubscriptionHelper {
   public function handleSubscriptionPaid(Subscription $subscription, \Stripe\Subscription $stripeSubscription) {
      $newPeriodEnd = \DateTime::createFromFormat('U', $stripeSubscription->current_period_end); 
      
+     //send an email if renewal
+     $isRenewal = $newPeriodEnd > $subscription->getBillingPeriodEndsAt();
+     
      $subscription->setBillingPeriodEndsAt($newPeriodEnd);
+     
      $this->em->persist($subscription);
      $this->em->flush($subscription);
   }
