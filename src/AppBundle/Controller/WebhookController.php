@@ -34,8 +34,9 @@ class WebhookController extends BaseController{
         
         $subscriptionHelper->fullyCancelSubscription($subscription);
         break;
-      default: 
-        throw new \Exception('Unexpected webhook type form Stripe! '.$stripeEvent->type);
+      default:
+        //allow this - we'll have Stripe send us everything
+        //throw new \Exception('Unexpected webhook type form Stripe! '.$stripeEvent->type);
     }
     
     return new Response('Event handled: ' . $stripeEvent->type);  
