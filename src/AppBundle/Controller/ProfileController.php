@@ -16,14 +16,20 @@ class ProfileController extends BaseController {
    */
   public function accountAction() {
     $currentPlan = null;
+    $otherPlan = null;
+    
     if ($this->getUser()->hasActiveSubscription()){
       $currentPlan = $this->get('subscription_helper')
         ->findPlan($this->getUser()->getSubscription()->getStripePlanId());
+      
+      $otherPlan = $this->get('subscription_helper')
+        ->findPlanToChangeTo($currentPlan->getPlanId());
     }
     return $this->render('profile/account.html.twig', [
       'error' => null,
       'stripe_public_key' => $this->getParameter('stripe_public_key'),
-      'current_plan' => $currentPlan  
+      'current_plan' => $currentPlan,
+      'otherPlan' => $otherPlan   
     ]);
   }
   /**

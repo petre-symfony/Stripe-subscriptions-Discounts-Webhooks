@@ -4,6 +4,7 @@ namespace AppBundle\Subscription;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\Subscription;
+use AppBundle\Subscription\SubscriptionPlan;
 use Doctrine\ORM\EntityManager;
 
 class SubscriptionHelper {
@@ -40,6 +41,21 @@ class SubscriptionHelper {
     }
   }
   
+  /**
+   * 
+   * @param $currentPlanId
+   * @return SubscriptionPlan
+   */
+  public function findPlanToChangeTo($currentPlanId){
+    if (strpos($currentPlan, 'farmer_brent') !== false){
+      $newPlanId = str_replace('farmer_brent', 'new_zeelander', $currentPlanId);
+    } else {
+      $newPlanId = str_replace('new_zeelander', 'farmer_brent', $currentPlanId);
+    }
+    
+    return $this->findPlan($newPlanId);
+  }
+
   public function addSubscriptionToUser(\Stripe\Subscription $stripeSubscription, User $user) {
     $subscription = $user->getSubscription();
     if (!$subscription) {
