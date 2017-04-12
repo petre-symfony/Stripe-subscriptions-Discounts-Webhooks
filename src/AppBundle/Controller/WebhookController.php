@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Entity\StripeEventLog;
 
 class WebhookController extends BaseController{
   /** 
@@ -18,6 +19,18 @@ class WebhookController extends BaseController{
     }
     
     $eventId = $data['id'];
+    
+    $em = $this->getDoctrine()->getManager();
+    $existingLog = $em->getRepository('AppBundle:StripeEventLog')
+      ->findOneBy(['stripeEventId' => $eventId]);
+    if ($existingLog) {
+      return new Response('Event previously handled');
+    }
+    
+    $log = new StripeEventLog($eventId);
+    $em->persist($log);
+    $em->flush($log);
+    
     if ($this->getParameter('verify_stripe_event')){
       $stripeEvent = $this->get('stripe_client')->findEvent($eventId);
     } else {
