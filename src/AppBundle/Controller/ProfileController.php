@@ -95,4 +95,12 @@ class ProfileController extends BaseController {
     
     return $this->redirectToRoute('profile_account');
   }
+  
+  /**
+   * @Route("/profile/plan/change/preview/{planId}", name="account_preview_plan_change")
+   */
+  public function previewPlanChangeAction($planId) {
+    $plan = $this->get('subscription_helper')
+      ->findPlan($planId);        
+  }
 }
