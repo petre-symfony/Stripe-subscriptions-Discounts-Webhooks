@@ -110,8 +110,11 @@ class ProfileController extends BaseController {
         $plan
       );
     
-    dump($stripeInvoice);
+    //contains the prorations *plus* the next cycle's amount
+    $total = $stripeInvoice->amount_due;
     
-    return new JsonResponse(['total' => 50]);
+    $total -= $plan->getPrice()*100;
+    
+    return new JsonResponse(['total' => $total/100]);
   }
 }
