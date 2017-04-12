@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Security("is_granted('ROLE_USER')")
@@ -101,6 +102,16 @@ class ProfileController extends BaseController {
    */
   public function previewPlanChangeAction($planId) {
     $plan = $this->get('subscription_helper')
-      ->findPlan($planId);        
+      ->findPlan($planId);
+    
+    $stripeInvoice = $this->get('stripe_client')
+      ->getUpcomingInvoiceForChangedSubscription(
+        $this->getUser(),
+        $plan
+      );
+    
+    dump($stripeInvoice);
+    
+    return new JsonResponse(['total' => 50]);
   }
 }
