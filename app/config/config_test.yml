@@ -1,6 +1,9 @@
 imports:
   - { resource: config_dev.yml }
 
+parameters:
+  verify_stripe_event: false
+  
 framework:
   test: ~
   session:
