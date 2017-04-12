@@ -43,7 +43,13 @@
                     <span class="label label-warning">Cancelled</span>
                   {% else %}  
                     {{ current_plan.name }}
+                    
                     <span class="label label-success">Active</span>
+                    
+                    <button class="btn btn-xs btn-link pull-right js-change-plan-button"
+                      data-plan-name= "{{ otherPlan.name }}">
+                        Change to {{ otherPlan.name }}
+                    </button>
                   {% endif %}
                 {% else %}
                    <span class="label label-default">None</span>
