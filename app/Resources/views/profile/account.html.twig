@@ -10,7 +10,13 @@
         e.preventDefault();
         
         $('.js-update-card-wrapper').slideToggle();
-      });  
+      }); 
+      
+      $('.js-change-plan-button').on('click', function(e){
+        e.preventDefault();
+        
+        swal('loading Plan Details');
+      });
     });
   </script>
 {% endblock %}  

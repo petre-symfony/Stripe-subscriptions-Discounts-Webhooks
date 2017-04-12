@@ -47,7 +47,7 @@ class SubscriptionHelper {
    * @return SubscriptionPlan
    */
   public function findPlanToChangeTo($currentPlanId){
-    if (strpos($currentPlan, 'farmer_brent') !== false){
+    if (strpos($currentPlanId, 'farmer_brent') !== false){
       $newPlanId = str_replace('farmer_brent', 'new_zeelander', $currentPlanId);
     } else {
       $newPlanId = str_replace('new_zeelander', 'farmer_brent', $currentPlanId);
