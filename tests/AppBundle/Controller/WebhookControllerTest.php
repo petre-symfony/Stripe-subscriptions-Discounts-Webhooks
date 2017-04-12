@@ -70,7 +70,7 @@ class WebhookControllerTest extends WebTestCase {
 {
   "created": 1326853478,
   "livemode": false,
-  "id": "evt_00000000000000",
+  "id": "evt_00000000000000%s",
   "type": "customer.subscription.deleted",
   "object": "event",
   "request": null,
@@ -118,6 +118,6 @@ class WebhookControllerTest extends WebTestCase {
 }
 EOF;
     
-    return sprintf($json, $subscriptionId);
+    return sprintf($json, mt_rand(), $subscriptionId);
   }  
 }
