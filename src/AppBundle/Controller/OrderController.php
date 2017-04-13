@@ -73,6 +73,14 @@ class OrderController extends BaseController {
     ));
 
   }
+  
+  /**
+   * @Route("/checkout/coupon", name="order_add_coupon")
+   * @Method("POST")
+   */
+  public function addCouponAction() {
+    
+  }
 
   /**
    * @param $token
