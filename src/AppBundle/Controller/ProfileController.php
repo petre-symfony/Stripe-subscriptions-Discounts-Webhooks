@@ -115,12 +115,18 @@ class ProfileController extends BaseController {
         $this->getUser(),
         $plan
       );
-    dump($stripeInvoice);
     
-    //contains the prorations *plus* the next cycle's amount
+    $currentUserPlan = $this->get('subscription_helper')
+      ->findPlan($this->getUser()->getSubscription()->getStripePlanId());
+    
+    //contains the prorations 
+    //*plus* - if the duration matches -the next cycle's amount
     $total = $stripeInvoice->amount_due;
     
-    $total -= $plan->getPrice()*100;
+    if($plan->getDuration() == $currentUserPlan->getDuration()){
+      $total -= $plan->getPrice()*100;  
+    }
+    
     
     return new JsonResponse(['total' => $total/100]);
   }
