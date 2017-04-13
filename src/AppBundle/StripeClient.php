@@ -53,7 +53,14 @@ class StripeClient {
 
     if ($payImmediately) {
       // guarantee it charges *right* now
-      $invoice->pay();
+      try {
+        $invoice->pay();
+      } catch(\Stripe\Error\Card $e){
+        $invoice->closed = true;
+        $invoice->save();
+        
+        throw $e;
+      }
     }
 
     return $invoice;
@@ -131,11 +138,18 @@ class StripeClient {
   
   public function changePlan(User $user, SubscriptionPlan $newPlan){
     $stripeSubscription = $this->findSubscription($user->getSubscription()->getStripeSubscriptionId());
+    
+    $originalPlanId = $stripeSubscription->plan->id;
+    
     $stripeSubscription->plan = $newPlan->getPlanId();
     $stripeSubscription->save();
     
+    try {
     //immediately invoice them
     $this->createInvoice($user);
+    } catch(\Stripe\Error\Card $e){
+      
+    }
     
     return $stripeSubscription;
   }
