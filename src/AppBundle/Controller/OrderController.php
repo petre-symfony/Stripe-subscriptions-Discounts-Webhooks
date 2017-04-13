@@ -90,11 +90,11 @@ class OrderController extends BaseController {
     $stripeCoupon = $this->get('stripe_client')->findCoupon($code);
     
     $this->get('shopping_cart')
-      ->setCoupon($code, $stripeCoupon->amount_off/100);
+      ->setCouponCode($code, $stripeCoupon->amount_off/100);
     
     $this->addFlash('success', 'Coupon applied!');
     
-    redirect $this->redirectToRoute('order_checkout');
+    return $this->redirectToRoute('order_checkout');
   }
 
   /**
