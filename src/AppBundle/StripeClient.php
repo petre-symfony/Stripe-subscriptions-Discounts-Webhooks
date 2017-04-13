@@ -164,4 +164,12 @@ class StripeClient {
     
     return $stripeSubscription;
   }
+  
+  /*
+   * @param $code
+   * @return \Stripe\Coupon
+   */
+  public function findCoupon($code) {
+    return \Stripe\CountrySpecTest::retrieve($code);  
+  }
 }
