@@ -133,5 +133,10 @@ class StripeClient {
     $stripeSubscription = $this->findSubscription($user->getSubscription()->getStripeSubscriptionId());
     $stripeSubscription->plan = $newPlan->getPlanId();
     $stripeSubscription->save();
+    
+    //immediately invoice them
+    $this->createInvoice($user);
+    
+    return $stripeSubscription;
   }
 }
