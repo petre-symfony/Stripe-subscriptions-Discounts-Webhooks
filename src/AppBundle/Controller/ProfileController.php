@@ -127,9 +127,14 @@ class ProfileController extends BaseController {
     $plan = $this->get('subscription_helper')
       ->findPlan($planId); 
     
+    try {
     $stripeSubscription = $this->get('stripe_client')
       ->changePlan($this->getUser(), $plan);
-    
+    } catch(\Stripe\Error\Card $e){
+      return new JsonResponse([
+        'message' => $e->getMessage()
+      ], 400);
+    }
     
     //causes the planId to be updated on the user's subscription
     $this->get('subscription_helper')
