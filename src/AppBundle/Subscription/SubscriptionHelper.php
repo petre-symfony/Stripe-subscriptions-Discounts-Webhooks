@@ -71,6 +71,16 @@ class SubscriptionHelper {
     
     return $this->findPlan($newPlanId);
   }
+  
+  public function findPlanForOtherDuration($currentPlanId) {
+     if (strpos($currentPlanId, 'monthly') !== false){
+      $newPlanId = str_replace('monthly', 'yearly', $currentPlanId);
+    } else {
+      $newPlanId = str_replace('yearly', 'monthly', $currentPlanId);
+    } 
+    
+    return $this->findPlan($newPlanId);
+  }
 
   public function addSubscriptionToUser(\Stripe\Subscription $stripeSubscription, User $user) {
     $subscription = $user->getSubscription();

@@ -19,6 +19,7 @@ class ProfileController extends BaseController {
   public function accountAction() {
     $currentPlan = null;
     $otherPlan = null;
+    $otherDurationPlan = null;
     
     if ($this->getUser()->hasActiveSubscription()){
       $currentPlan = $this->get('subscription_helper')
