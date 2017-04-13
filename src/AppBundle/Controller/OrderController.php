@@ -78,8 +78,14 @@ class OrderController extends BaseController {
    * @Route("/checkout/coupon", name="order_add_coupon")
    * @Method("POST")
    */
-  public function addCouponAction() {
+  public function addCouponAction(Request $request) {
+    $code = $request->request->get('code');
     
+    if (!$code){
+      $this->addFlash('error', 'Missing coupon code');
+      
+      return $this->redirectToRoute('order_checkout');
+    }
   }
 
   /**
