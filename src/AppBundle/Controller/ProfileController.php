@@ -123,7 +123,17 @@ class ProfileController extends BaseController {
    * @Method("POST")
    */
   public function changePlanAction($planId) {
-     $plan = $this->get('subscription_helper')
-       ->findPlan($planId); 
+    $plan = $this->get('subscription_helper')
+      ->findPlan($planId); 
+    
+    $stripeSubscription = $this->get('stripe_client')
+      ->changePlan($this->getUser(), $plan);
+    
+    
+    //causes the planId to be updated on the user's subscription
+    $this->get('subscription_helper')
+      ->addSubscriptionToUser($stripeSubscription, $this->getUser());
+    
+    return new Response(null, 204);
   }
 }
