@@ -27,12 +27,16 @@ class ProfileController extends BaseController {
       
       $otherPlan = $this->get('subscription_helper')
         ->findPlanToChangeTo($currentPlan->getPlanId());
+      
+      $otherDurationPlan = $this->get('subscription_helper')
+        ->findPlanForOtherDuration($currentPlan->getPlanId());
     }
     return $this->render('profile/account.html.twig', [
       'error' => null,
       'stripe_public_key' => $this->getParameter('stripe_public_key'),
       'current_plan' => $currentPlan,
-      'otherPlan' => $otherPlan   
+      'otherPlan' => $otherPlan,
+      'otherDurationPlan' => $otherDurationPlan  
     ]);
   }
   /**
