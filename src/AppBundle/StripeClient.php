@@ -140,20 +140,26 @@ class StripeClient {
     $stripeSubscription = $this->findSubscription($user->getSubscription()->getStripeSubscriptionId());
     
     $originalPlanId = $stripeSubscription->plan->id;
+    $currentPeriodStart = $stripeSubscription->current_period_start;
     
     $stripeSubscription->plan = $newPlan->getPlanId();
     $stripeSubscription->save();
     
-    try {
-    //immediately invoice them
-    $this->createInvoice($user);
-    } catch(\Stripe\Error\Card $e){
-      $stripeSubscription->plan = $originalPlanId;
-      //prevent proration discount/charges from changing back
-      $stripeSubscription->prorate = false;
-      $stripeSubscription->save();
-      
-      throw $e;
+    // if the duration did not change, Stripe will not charge them immediately
+    // but we *do* want them to be charged immediately
+    // if the duration changed, an invoice was already created and paid
+    if ($stripeSubscription->current_period_start == $currentPeriodStart){
+      try {
+      //immediately invoice them
+      $this->createInvoice($user);
+      } catch(\Stripe\Error\Card $e){
+        $stripeSubscription->plan = $originalPlanId;
+        //prevent proration discount/charges from changing back
+        $stripeSubscription->prorate = false;
+        $stripeSubscription->save();
+
+        throw $e;
+      }
     }
     
     return $stripeSubscription;
