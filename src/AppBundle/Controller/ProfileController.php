@@ -115,6 +115,7 @@ class ProfileController extends BaseController {
         $this->getUser(),
         $plan
       );
+    dump($stripeInvoice);
     
     //contains the prorations *plus* the next cycle's amount
     $total = $stripeInvoice->amount_due;
