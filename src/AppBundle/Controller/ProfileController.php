@@ -117,4 +117,13 @@ class ProfileController extends BaseController {
     
     return new JsonResponse(['total' => $total/100]);
   }
+  
+  /**
+   * @Route("/profile/plan/change/execute/{planId}", name="account_execute_plan_change")
+   * @Method("POST")
+   */
+  public function changePlanAction($planId) {
+     $plan = $this->get('subscription_helper')
+       ->findPlan($planId); 
+  }
 }
