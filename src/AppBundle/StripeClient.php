@@ -148,7 +148,12 @@ class StripeClient {
     //immediately invoice them
     $this->createInvoice($user);
     } catch(\Stripe\Error\Card $e){
+      $stripeSubscription->plan = $originalPlanId;
+      //prevent proration discount/charges from changing back
+      $stripeSubscription->prorate = false;
+      $stripeSubscription->save();
       
+      throw $e;
     }
     
     return $stripeSubscription;
