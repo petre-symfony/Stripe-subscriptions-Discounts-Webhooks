@@ -17,13 +17,29 @@ class SubscriptionHelper {
     $this->plans[] = new SubscriptionPlan(
       'farmer_brent_monthly',
       'Farmer Brent',
-      99
+      99,
+      SubscriptionPlan::DURATION_MONTHLY      
+    );
+    
+    $this->plans[] = new SubscriptionPlan(
+      'farmer_brent_yearly',
+      'Farmer Brent',
+      990,
+      SubscriptionPlan::DURATION_YEARLY     
     );
     
     $this->plans[] = new SubscriptionPlan(
       'new_zeelander_monthly',
       'New Zeelander',
-      199
+      199,
+      SubscriptionPlan::DURATION_MONTHLY     
+    );
+    
+    $this->plans[] = new SubscriptionPlan(
+      'new_zeelander_yearly',
+      'New Zeelander',
+      1990,
+      SubscriptionPlan::DURATION_YEARLY    
     );
     
     $this->em = $em;
