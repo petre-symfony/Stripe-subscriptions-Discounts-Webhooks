@@ -86,6 +86,9 @@ class OrderController extends BaseController {
       
       return $this->redirectToRoute('order_checkout');
     }
+    
+    $stripeCoupon = $this->get('stripe_client')->findCoupon($code);
+    dump($stripeCoupon);die;
   }
 
   /**

@@ -170,6 +170,6 @@ class StripeClient {
    * @return \Stripe\Coupon
    */
   public function findCoupon($code) {
-    return \Stripe\CountrySpecTest::retrieve($code);  
+    return \Stripe\Coupon::retrieve($code);  
   }
 }
