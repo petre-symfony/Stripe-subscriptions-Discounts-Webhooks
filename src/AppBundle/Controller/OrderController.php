@@ -90,7 +90,15 @@ class OrderController extends BaseController {
     try {
       $stripeCoupon = $this->get('stripe_client')->findCoupon($code);
     } catch(\Stripe\Error\InvalidRequest $e){
-      $this->addFlash('error', 'Invalid Coupon');  
+      $this->addFlash('error', 'Invalid Coupon');
+      
+      return $this->redirectToRoute('order_checkout');
+    }
+    
+    if(!$stripeCoupon->valid){
+      $this->addFlash('error', 'Coupon expired');
+      
+      return $this->redirectToRoute('order_checkout');
     }
     
     $this->get('shopping_cart')
