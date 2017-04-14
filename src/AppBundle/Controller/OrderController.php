@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
+use AppBundle\Store\ShoppingCart;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -27,7 +28,16 @@ class OrderController extends BaseController {
    * @Route("/cart/subscription/{planId}", name="order_add_subscription_to_cart")
    */
   public function addSubscriptionToCartAction($planId) {
-    // todo - add the subscription plan to the cart!
+    $subscriptionHelper = $this->get('subscription_helper');
+    $plan = $subscriptionHelper->findPlan($planId);
+    
+    if(!$plan) {
+      throw $this->createNotFoundException('Bad plan id!');
+    }
+    
+    $this->get('shopping_cart')->addSubscription($planId);
+    
+    return $this->redirectToRoute('order_checkout');
   }
 
   /**
@@ -63,6 +73,29 @@ class OrderController extends BaseController {
     ));
 
   }
+  
+  /**
+   * @Route("/checkout/coupon", name="order_add_coupon")
+   * @Method("POST")
+   */
+  public function addCouponAction(Request $request) {
+    $code = $request->request->get('code');
+    
+    if (!$code){
+      $this->addFlash('error', 'Missing coupon code');
+      
+      return $this->redirectToRoute('order_checkout');
+    }
+    
+    $stripeCoupon = $this->get('stripe_client')->findCoupon($code);
+    
+    $this->get('shopping_cart')
+      ->setCouponCode($code, $stripeCoupon->amount_off/100);
+    
+    $this->addFlash('success', 'Coupon applied!');
+    
+    return $this->redirectToRoute('order_checkout');
+  }
 
   /**
    * @param $token
@@ -73,11 +106,15 @@ class OrderController extends BaseController {
     /** @var User $user */
     $user = $this->getUser();
     if (!$user->getStripeCustomerId()) {
-      $stripeClient->createCustomer($user, $token);
+      $stripeCustomer = $stripeClient->createCustomer($user, $token);
     } else {
-      $stripeClient->updateCustomerCard($user, $token);
+      $stripeCustomer = $stripeClient->updateCustomerCard($user, $token);
     }
+    
+    //save card details
+    $this->get('subscription_helper')->updateCardDetails($user, $stripeCustomer);
 
+    /** @var ShoppingCart $cart */
     $cart = $this->get('shopping_cart');
 
     foreach ($cart->getProducts() as $product) {
@@ -87,7 +124,17 @@ class OrderController extends BaseController {
         $product->getName()
       );
     }
-    $stripeClient->createInvoice($user, true);
+    
+    if($cart->getSubscriptionPlan()){
+      // a subscription creates an invoice
+      $stripeSubscription = $stripeClient->createSubscription($user, $cart->getSubscriptionPlan());
+      
+      $this->get('subscription_helper')->addSubscriptionToUser($stripeSubscription, $user);
+    } else {
+      //charge the invoice!
+      $stripeClient->createInvoice($user, true);
+    }
+    
   }
 }
 
