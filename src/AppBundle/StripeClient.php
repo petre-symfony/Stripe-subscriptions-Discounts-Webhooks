@@ -178,6 +178,11 @@ class StripeClient {
     return \Stripe\Coupon::retrieve($code);  
   }
   
+  /**
+   * 
+   * @param User $user
+   * @return \Stripe\Invoice[]
+   */
   public function findCustomer(User $user) {
     return \Stripe\Customer::retrieve($user->getStripeCustomerId());  
   }
