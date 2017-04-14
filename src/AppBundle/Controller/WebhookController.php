@@ -60,12 +60,18 @@ class WebhookController extends BaseController{
         break;
       case 'invoice.payment_failed':
         $stripeSubscriptionId = $stripeEvent->data->object->id;
-        
         if ($stripeSubscriptionId){
           $subscription = $this->findSubscription($stripeSubscriptionId);
           if($stripeEvent->data->object->attempt_count == 1){
-            //todo send an email
+            
             $user = $subscription->getUser();
+            
+            $stripeCustomer = $this->get('stripe_client')
+              ->findCustomer($user);
+            $hasCardOnFile = count($stripeCustomer->sources->data) > 0;
+            
+            //todo send an email
+            //use hasCardOnFile to customize this
           }
         }
         break;
