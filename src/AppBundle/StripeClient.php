@@ -181,4 +181,21 @@ class StripeClient {
   public function findCustomer(User $user) {
     return \Stripe\Customer::retrieve($user->getStripeCustomerId());  
   }
+  
+  public function findPaidInvoices(User $user){
+    $allInvoices = \Stripe\Invoice::all([
+      'customer' => $user->getStripeCustomerId()    
+    ]);
+    
+    $iterator = $allInvoices->autoPagingIterator();
+    
+    $invoices = array();
+    foreach($iterator as $invoice){
+      if ($invoice->paid){
+        $invoices[] = $invoice;
+      }
+    }
+    
+    return $invoices;
+  }
 }
