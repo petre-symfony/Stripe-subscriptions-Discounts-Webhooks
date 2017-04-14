@@ -114,6 +114,9 @@ class OrderController extends BaseController {
    * @throws \Stripe\Error\Card
    */
   private function chargeCustomer($token) {
+    if (!$token && $this->get('shopping_cart')->getTotalWithDiscount() > 0){
+      throw new \Exception('Somehow the order is non-free, but we have no token!?');
+    }
     $stripeClient = $this->get('stripe_client');
     /** @var User $user */
     $user = $this->getUser();
