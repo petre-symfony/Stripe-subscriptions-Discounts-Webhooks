@@ -158,4 +158,11 @@ class ProfileController extends BaseController {
     
     return new Response(null, 204);
   }
+  
+  /**
+   * @Route("/profile/invoices/{invoiceId}", name="account_invoice_show")
+   */
+  public function showInvoiceAction($invoiceId){
+    
+  }
 }
