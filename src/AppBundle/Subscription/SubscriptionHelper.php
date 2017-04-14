@@ -102,6 +102,10 @@ class SubscriptionHelper {
   }
   
   public function updateCardDetails(User $user, \Stripe\Customer $stripeCustomer) {
+    if (!$stripeCustomer->sources->data){
+      //customer may not have a card on file
+      return;
+    }
     $cardDetails = $stripeCustomer->sources->data[0];
     $user->setCardBrand($cardDetails->brand);
     $user->setCardLast4($cardDetails->last4);
