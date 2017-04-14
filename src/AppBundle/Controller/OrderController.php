@@ -123,7 +123,12 @@ class OrderController extends BaseController {
     if (!$user->getStripeCustomerId()) {
       $stripeCustomer = $stripeClient->createCustomer($user, $token);
     } else {
-      $stripeCustomer = $stripeClient->updateCustomerCard($user, $token);
+      //don't need to update it if the order is free
+      if ($token){
+        $stripeCustomer = $stripeClient->updateCustomerCard($user, $token);
+      } else {
+        $stripeCustomer = $stripeClient->findCustomer($user);
+      }
     }
     
     //save card details

@@ -177,4 +177,8 @@ class StripeClient {
   public function findCoupon($code) {
     return \Stripe\Coupon::retrieve($code);  
   }
+  
+  public function findCustomer(User $user) {
+    return \Stripe\Customer::retrieve($user->getStripeCustomerId());  
+  }
 }
