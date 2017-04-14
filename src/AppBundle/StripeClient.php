@@ -16,10 +16,15 @@ class StripeClient {
   }
 
   public function createCustomer(User $user, $paymentToken) {
-    $customer = \Stripe\Customer::create([
-      'email' => $user->getEmail(),
-      'source' => $paymentToken,
-    ]);
+    $data = [
+      'email' => $user->getEmail()    
+    ];
+    
+    if($paymentToken){
+      $data['source'] = $paymentToken;  
+    }
+    
+    $customer = \Stripe\Customer::create($data);
     $user->setStripeCustomerId($customer->id);
 
     $this->em->persist($user);
