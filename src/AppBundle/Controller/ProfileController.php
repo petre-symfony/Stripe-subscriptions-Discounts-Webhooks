@@ -163,6 +163,11 @@ class ProfileController extends BaseController {
    * @Route("/profile/invoices/{invoiceId}", name="account_invoice_show")
    */
   public function showInvoiceAction($invoiceId){
+    $stripeInvoice = $this->get('stripe_client')
+      ->findInvoice($invoiceId);
     
+    return $this->render('profile/invoice.html.twig', array(
+      'invoice' => $stripeInvoice
+    ));
   }
 }
