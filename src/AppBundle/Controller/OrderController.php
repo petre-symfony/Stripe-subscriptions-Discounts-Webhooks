@@ -117,6 +117,11 @@ class OrderController extends BaseController {
     /** @var ShoppingCart $cart */
     $cart = $this->get('shopping_cart');
 
+    if ($cart->getCouponCodeValue()){
+      $stripeCustomer->coupon = $cart->getCouponCode();
+      $stripeCustomer->save();
+    }
+    
     foreach ($cart->getProducts() as $product) {
       $stripeClient->createInvoiceItem(
         $product->getPrice() * 100,
