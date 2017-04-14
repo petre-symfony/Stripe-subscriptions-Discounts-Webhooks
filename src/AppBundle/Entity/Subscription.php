@@ -82,4 +82,43 @@ class Subscription {
   public function getBillingPeriodEndsAt() {
     return $this->billingPeriodEndsAt;
   }
+  
+  public function setBillingPeriodEndsAt($billingPeriodEndsAt){
+    $this->billingPeriodEndsAt = $billingPeriodEndsAt;  
+  }
+
+  public function activateSubscription($stripePlanId, $stripeSubscriptionId, \DateTime $periodEnd) {
+    $this->stripePlanId = $stripePlanId;
+    $this->stripeSubscriptionId = $stripeSubscriptionId;
+    $this->billingPeriodEndsAt = $periodEnd;
+    $this->endsAt = null;
+  }
+  
+  public function deactivateSubscription() {
+    //paid through the end of the period
+    $this->endsAt = $this->billingPeriodEndsAt;
+    $this->billingPeriodEndsAt = null;
+  }
+  
+  public function cancel() {
+    $this->endsAt = new \DateTime();
+    $this->billingPeriodEndsAt = null;
+  }
+  
+  /**
+   * Subscription is active, or canceled but still in "active" period
+   * 
+   * @return bool
+   */
+  public function isActive() {
+    return $this->endsAt === null || $this->endsAt > new \DateTime();  
+  }
+  
+  /* if the subscription is active, has the user actually canceled it or not?
+   * 
+   * @return bool
+  */
+  public function isCanceled() {
+    return $this->endsAt !== null; 
+  }
 }
